@@ -7,6 +7,8 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using XpressMart.Application.Identity;
 using XpressMart.Application.Persistence;
+using XpressMart.Application.Services;
+using XpressMart.Application.Services.IServices;
 using XpressMart.Core.Entities;
 
 namespace XpressMart.API
@@ -82,6 +84,7 @@ namespace XpressMart.API
 
             builder.Services.AddHttpContextAccessor();
             
+            builder.Services.AddScoped<IUserService, UserService>();
 
             var app = builder.Build();
 
