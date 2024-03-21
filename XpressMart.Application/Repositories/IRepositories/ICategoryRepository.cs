@@ -8,7 +8,7 @@ using XpressMart.Core.Models.Request;
 
 namespace XpressMart.Application.Repositories.IRepositories
 {
-    internal interface ICategoryRepository
+    public interface ICategoryRepository
     {
         Category CreateCategory(CategoryRequestModel request);
         Category UpdateCategory(int categoryId, CategoryRequestModel request);
