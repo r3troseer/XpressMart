@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace XpressMart.Core.Entities
+﻿namespace XpressMart.Core.Entities
 {
-    public class Category:BaseEntity
+    public class Category:BaseEntity<int>
     {
         public string Name { get; set; }
         public string Description { get; set; }

@@ -13,7 +13,7 @@ namespace XpressMart.API.Extensions
         public static IServiceCollection AddDbContext(this IServiceCollection services)
         {
             services.AddDbContext<AppDBContext>(options =>
-                options.UseSqlite("Data Source=XpressMart.db"));
+                options.UseSqlite("Data Source=XpressMart.db", b => b.MigrationsAssembly("XpressMart.API")));
 
             return services;
         }

@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace XpressMart.Core.Entities
 {
-    public class Product : BaseEntity
+    public class Product : BaseEntity<string>
     {
+        public Product() 
+        {
+            Id = Guid.NewGuid().ToString();
+        }
         public string Name {  get; set; }
         public string Description {  get; set; }
         public decimal Price { get; set; }

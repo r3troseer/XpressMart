@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace XpressMart.Core.Entities
 {
-    public class Order : BaseEntity
+    public class Order : BaseEntity<string>
     {
-        public int CustomerId { get; set; }
+        public Order()
+        {
+            Id = Ulid.NewUlid().ToString();
+        }
+        public string CustomerId { get; set; }
+        [ForeignKey("CustomerId")]
         public virtual Customer Customer { get; set; }
         public DateTime OrderDate { get; set; }
         public decimal TotalAmount { get; set; }

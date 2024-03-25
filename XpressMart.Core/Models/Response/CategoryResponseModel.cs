@@ -1,9 +1,9 @@
-﻿using XpressMart.Core.Models.Request;
+﻿using XpressMart.Core.Entities;
+using XpressMart.Core.Models.Request;
 
 namespace XpressMart.Core.Models.Response
 {
-    public class CategoryResponseModel : CategoryRequestModel
+    public class CategoryResponseModel : BaseResponse<Category>
     {
-        public int Id { get; set; }
     }
 }
