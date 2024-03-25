@@ -1,7 +1,9 @@
-﻿using XpressMart.Application.Persistence;
+﻿using Microsoft.EntityFrameworkCore;
+using XpressMart.Application.Persistence;
 using XpressMart.Application.Repositories.IRepositories;
 using XpressMart.Core.Entities;
 using XpressMart.Core.Models.Request;
+using XpressMart.Core.Models.Response;
 
 namespace XpressMart.Application.Repositories
 {
@@ -13,47 +15,78 @@ namespace XpressMart.Application.Repositories
         {
             _context = context;
         }
-        public Category CreateCategory(CategoryRequestModel request)
+        public async Task<BaseResponse<Category>> CreateCategory(CategoryRequestModel request)
         {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
             var category = new Category
             {
                 Name = request.Name,
                 Description = request.Description
             };
-            _context.Categories.Add(category);
-            _context.SaveChanges();
-            return category;
+
+            await _context.Categories.AddAsync(category);
+            var saved  = await _context.SaveChangesAsync();
+
+            if (!(saved > 0 ? true : false))
+                return new BaseResponse<Category>(new List<string> {"Category creation failed"}, false );
+
+            return new BaseResponse<Category>(data: category, success: true, message: "Category created sucessfuly");
         }
 
-        public Category UpdateCategory(int categoryId, CategoryRequestModel request)
+        public async Task<BaseResponse<Category>> UpdateCategory(CategoryRequestModel request)
         {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
             var categoryUpdate = new Category
             {
-                Id = categoryId,
+                Id = request.Id.GetValueOrDefault(),
                 Name = request.Name,
                 Description = request.Description
             };
+
             _context.Categories.Update(categoryUpdate);
-            _context.SaveChanges();
-            return categoryUpdate;
+            var saved = await _context.SaveChangesAsync();
+
+            if (!(saved > 0 ? true : false))
+                return new BaseResponse<Category>(new List<string> { "Category update failed" }, false);
+
+            return new BaseResponse<Category>(data: categoryUpdate, success: true, message: "Category updated sucessfuly");
         }
 
-        public bool DeleteCategory(int categoryId)
+        public async Task<BaseResponse<Category>> DeleteCategory(int categoryId)
         {
-            var category = GetCategory(categoryId);
-            _context.Categories.Remove(category);
-            var saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            var category = await GetCategory(categoryId);
+            _context.Categories.Remove(category.Data);
+            var saved = await _context.SaveChangesAsync();
+
+            if (!(saved > 0 ? true : false))
+                return new BaseResponse<Category>(new List<string> { "Category deletion failed" }, false);
+
+            return new BaseResponse<Category>(success: true, message: "Category deleted sucessfuly");
         }
 
-        public Category GetCategory(int categoryId)
+        public async Task<BaseResponse<Category>> GetCategory(int categoryId)
         {
-            return _context.Categories.FirstOrDefault(c => c.Id == categoryId);
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
+
+            if (category == null)
+                return new BaseResponse<Category>(new List<string> { "Category retrieval failed" }, false);
+
+            return new BaseResponse<Category>(data: category, success: true, message: "Category retrieved sucessfuly");
+
         }
 
-        public List<Category> GetCategories()
+        public async Task<BaseResponse<List<Category>>> GetCategories()
         {
-            return _context.Categories.ToList();
+            var categories = await _context.Categories.ToListAsync();
+
+            if (categories == null)
+                return new BaseResponse<List<Category>>(new List<string> { "Category retrieval failed" }, false);
+
+            return new BaseResponse<List<Category>>(data: categories, success: true, message: "Category retrieved sucessfuly");
         }
 
         public bool CategoryExists(int categoryId)

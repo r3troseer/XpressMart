@@ -13,7 +13,15 @@ namespace XpressMart.API.Extensions
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "XpressMart", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { 
+                    Title = "XpressMart", 
+                    Version = "v1",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Pius",
+                        Email = "piagbo3d@gmail.com",
+                    }
+                });
 
                 // Add JWT authentication
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace XpressMart.Core.Entities
+﻿namespace XpressMart.Core.Entities
 {
-    public class Delivery : BaseEntity
+    public class Delivery : BaseEntity<string>
     {
-        public int OrderId { get; set; }
+        public Delivery()
+        {
+            Id = Ulid.NewUlid().ToString();
+        }
+        public string OrderId { get; set; }
         public virtual Order Order { get; set; }
         public string TrackingNumber { get; set; }
         public DateTime ShippedDate { get; set; }
